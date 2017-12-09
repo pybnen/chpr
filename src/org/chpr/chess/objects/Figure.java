@@ -154,6 +154,7 @@ public class Figure {
 						moves.add(new Move(board, figureColor, figureType, col, row, destCol, destRow, false, hit));
 					}
 				}
+				// TODO castle
 			}
 		}
 		return moves;
