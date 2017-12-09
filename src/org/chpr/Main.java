@@ -1,8 +1,11 @@
 package org.chpr;
 
 import org.chpr.chess.Board;
+import org.chpr.chess.IBoard;
 import org.chpr.chess.objects.Figure;
 import org.chpr.chess.objects.Move;
+
+import java.util.List;
 
 
 public class Main {
@@ -10,14 +13,44 @@ public class Main {
     private static int currentColor;
 
     public static void main(String[] args) {
-        currentColor = Figure.WHITE;
-        board = new Board();
-
-        testFewMoves();
-        testEnPassant();
-        testPromotion();
-        testCastle();
+		//testExercise1();
+		testExercise2();
     }
+
+    private static void testExercise2() {
+		currentColor = Figure.WHITE;
+		board = new Board();
+		short[][] figures = new short[8][8];
+		figures[4][3] = Figure.ROOK + Figure.WHITE_OFFSET;
+
+		figures[2][3] = Figure.PAWN + Figure.WHITE_OFFSET;
+		figures[4][6] = Figure.QUEEN + Figure.BLACK_OFFSET;
+		board.setFigures(figures);
+		printBoard();
+		List<Move> moves = Figure.getValidMoves(board, 4, 3);
+		executeMoveList(moves);
+	}
+
+
+	private static void executeMoveList(List<Move> moves) {
+		for (Move m : moves) {
+			IBoard b = board.cloneIncompletely();
+			b.executeMove(m);
+			System.out.println(m);
+			System.out.println(b);
+			System.out.println("\n");
+		}
+	}
+
+    private static void testExercise1() {
+		currentColor = Figure.WHITE;
+		board = new Board();
+
+		testFewMoves();
+		testEnPassant();
+		testPromotion();
+		testCastle();
+	}
 
     private static void testFewMoves() {
         printBoard("Try a few moves:");
@@ -115,15 +148,25 @@ public class Main {
         currentColor = (currentColor == Figure.WHITE ? Figure.BLACK : Figure.WHITE);
     }
 
+
+
     private static void printBoard(String title) {
-        System.out.println(title);
-        printBoard();
+		printBoard(title, board);
     }
 
+	private static void printBoard(String title, Board b) {
+		System.out.println(title);
+		printBoard(b);
+	}
+
     private static void printBoard() {
-        System.out.println(board);
-        System.out.println("\n");
+		printBoard(board);
     }
+
+	private static void printBoard(Board b) {
+		System.out.println(b);
+		System.out.println("\n");
+	}
 
     private static void printCastleStatus() {
         System.out.println("Can white castle: " + board.canWhiteCastle());

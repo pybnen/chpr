@@ -27,6 +27,10 @@ public class Move {
 	private boolean prom;
 
 	public Move(IBoard board, int color, int type, int sourceCol, int sourceRow, int destCol, int destRow, boolean newType) {
+		this(board, color, type, sourceCol, sourceRow, destCol, destRow, newType, false /* will be handled by setHit() */);
+	}
+
+	public Move(IBoard board, int color, int type, int sourceCol, int sourceRow, int destCol, int destRow, boolean newType, boolean hit) {
 		this.color = color;
 		this.type = type;
 		this.sourceCol = sourceCol;
@@ -35,7 +39,7 @@ public class Move {
 		this.destRow = destRow;
 		this.board = board;
 		this.fig = type + (color == Figure.WHITE ? Figure.WHITE_OFFSET : Figure.BLACK_OFFSET);
-		this.hit = false; // will be handled by setHit()
+		this.hit = hit;
 		this.prom = newType;
 	}
 

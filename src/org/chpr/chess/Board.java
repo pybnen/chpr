@@ -3,6 +3,7 @@ package org.chpr.chess;
 import org.chpr.chess.objects.Figure;
 import org.chpr.chess.objects.Move;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -80,24 +81,48 @@ public class Board implements IBoard {
 	@Override
 	public IBoard cloneIncompletely() {
 		Board clonedBoard = new Board();
-		clonedBoard.figures = figures;
+		for (int col = 0; col < COLS; col++) {
+			for (int row = 0; row < ROWS; row++) {
+				clonedBoard.figures[col][row] = figures[col][row];
+			}
+		}
 		clonedBoard.canWhiteCastleKingside = canWhiteCastleKingside;
 		clonedBoard.canWhiteCastleQueenside = canWhiteCastleQueenside;
 		clonedBoard.canBlackCastleKingside = canBlackCastleKingside;
 		clonedBoard.canBlackCastleQueenside = canBlackCastleQueenside;
+		int historySize = history.size();
+		if (historySize > 0) {
+			clonedBoard.history.add(history.get(historySize - 1));
+		}
 		return clonedBoard;
 	}
 
 	@Override
 	public List<Move> getValidMoves() {
-		//TODO: Implement in exercise 2
-		return null;
+		List<Move> moves = new ArrayList<>();
+		for (int col = 0; col < COLS; col++) {
+			for (int row = 0; row < ROWS; row++) {
+				// iterate over every field
+				short figure = figures[col][row];
+				moves.addAll(Figure.getValidMoves(this, col, row));
+			}
+		}
+		return moves;
 	}
 
 	@Override
 	public List<Move> getValidMoves(int color) {
-		//TODO: Implement in exercise 2
-		return null;
+		List<Move> moves = new ArrayList<>();
+		for (int col = 0; col < COLS; col++) {
+			for (int row = 0; row < ROWS; row++) {
+				// iterate over every field
+				short figure = figures[col][row];
+				if (Figure.getColor(figure) == color) {
+					moves.addAll(Figure.getValidMoves(this, col, row));
+				}
+			}
+		}
+		return moves;
 	}
 
 	@Override
