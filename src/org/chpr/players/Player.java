@@ -21,7 +21,7 @@ public interface Player {
 	 * @param color color that should move
 	 * @param milliSeconds
 	 * @param random
-	 * @return chooen move
+	 * @return chosen move
 	 */
 	Move chooseMove(IBoard board, int color, int milliSeconds, java.util.Random random);
 }

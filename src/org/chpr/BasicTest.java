@@ -1,48 +1,14 @@
 package org.chpr;
 
 import org.chpr.chess.Board;
-import org.chpr.chess.IBoard;
 import org.chpr.chess.objects.Figure;
 import org.chpr.chess.objects.Move;
 
-import java.util.List;
-
-
-public class Main {
+public class BasicTest {
     private static Board board;
     private static int currentColor;
 
     public static void main(String[] args) {
-		//testExercise1();
-		testExercise2();
-    }
-
-    private static void testExercise2() {
-		currentColor = Figure.WHITE;
-		board = new Board();
-		short[][] figures = new short[8][8];
-		figures[4][3] = Figure.ROOK + Figure.WHITE_OFFSET;
-
-		figures[2][3] = Figure.PAWN + Figure.WHITE_OFFSET;
-		figures[4][6] = Figure.QUEEN + Figure.BLACK_OFFSET;
-		board.setFigures(figures);
-		printBoard();
-		List<Move> moves = Figure.getValidMoves(board, 4, 3);
-		executeMoveList(moves);
-	}
-
-
-	private static void executeMoveList(List<Move> moves) {
-		for (Move m : moves) {
-			IBoard b = board.cloneIncompletely();
-			b.executeMove(m);
-			System.out.println(m);
-			System.out.println(b);
-			System.out.println("\n");
-		}
-	}
-
-    private static void testExercise1() {
 		currentColor = Figure.WHITE;
 		board = new Board();
 
@@ -50,10 +16,10 @@ public class Main {
 		testEnPassant();
 		testPromotion();
 		testCastle();
-	}
+    }
 
     private static void testFewMoves() {
-        printBoard("Try a few moves:");
+        TestHelper.printBoard(board, "Try a few moves:");
         executeAndPrint("e2-e4");
         executeAndPrint("b7-b6");
         executeAndPrint("Ng1-f3");
@@ -73,7 +39,7 @@ public class Main {
         board.setFigures(figures);
         currentColor = Figure.BLACK;
 
-        printBoard("Test En Passant");
+		TestHelper.printBoard(board, "Test En Passant");
         executeAndPrint("b4xa3");
         resetBoard(false);
     }
@@ -84,7 +50,7 @@ public class Main {
         board.setFigures(figures);
         currentColor = Figure.WHITE;
 
-        printBoard("Test promotion");
+		TestHelper.printBoard(board, "Test promotion");
         executeAndPrint("b7-b8Q");
         resetBoard(false);
         System.out.println("----------------------\n");
@@ -92,26 +58,26 @@ public class Main {
 
     private static void testCastle() {
         setUpCastle();
-        printBoard("Test Castle: 0-0");
+		TestHelper.printBoard(board, "Test Castle: 0-0");
         executeAndPrint("0-0");
         printCastleStatus();
         executeAndPrint("0-0");
         printCastleStatus();
 
         setUpCastle();
-        printBoard("Test Castle: 0-0-0");
+		TestHelper.printBoard(board, "Test Castle: 0-0-0");
         executeAndPrint("0-0-0");
         printCastleStatus();
         executeAndPrint("0-0-0");
         printCastleStatus();
 
         setUpCastle();
-        printBoard("Test move with king");
+		TestHelper.printBoard(board, "Test move with king");
         executeAndPrint("Ke1-e2");
         printCastleStatus();
 
         setUpCastle();
-        printBoard("Test move with rooks");
+		TestHelper.printBoard(board, "Test move with rooks");
         executeAndPrint("Ra1xa8");
         printCastleStatus();
         executeAndPrint("Ke8-f8");
@@ -148,25 +114,6 @@ public class Main {
         currentColor = (currentColor == Figure.WHITE ? Figure.BLACK : Figure.WHITE);
     }
 
-
-
-    private static void printBoard(String title) {
-		printBoard(title, board);
-    }
-
-	private static void printBoard(String title, Board b) {
-		System.out.println(title);
-		printBoard(b);
-	}
-
-    private static void printBoard() {
-		printBoard(board);
-    }
-
-	private static void printBoard(Board b) {
-		System.out.println(b);
-		System.out.println("\n");
-	}
 
     private static void printCastleStatus() {
         System.out.println("Can white castle: " + board.canWhiteCastle());

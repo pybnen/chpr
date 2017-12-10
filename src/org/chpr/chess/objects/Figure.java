@@ -86,26 +86,34 @@ public class Figure {
 				int dir = (figureColor == WHITE ? 1 : -1);
 				int targetRow = row + dir;
 				if (isFree(board, col, targetRow)) {
-					if (row < rankRow(7, figureColor)) {
-						moves.add(new Move(board, figureColor, figureType, col, row, col, targetRow, false, false));
-
-						if (row == rankRow(2, figureColor) && isFree(board, col, targetRow + dir)) {
-							moves.add(new Move(board, figureColor, figureType, col, row, col, targetRow + dir, false, false));
-						}
-					} else {
+					if (targetRow == rankRow(8, figureColor)) {
 						// add promotions
 						moves.add(new Move(board, figureColor, QUEEN, col, row, col, targetRow, true, false));
 						moves.add(new Move(board, figureColor, ROOK, col, row, col, targetRow, true, false));
 						moves.add(new Move(board, figureColor, BISHOP, col, row, col, targetRow, true, false));
 						moves.add(new Move(board, figureColor, KNIGHT, col, row, col, targetRow, true, false));
+					} else {
+						moves.add(new Move(board, figureColor, figureType, col, row, col, targetRow, false, false));
+
+						if (row == rankRow(2, figureColor) && isFree(board, col, targetRow + dir)) {
+							moves.add(new Move(board, figureColor, figureType, col, row, col, targetRow + dir, false, false));
+						}
 					}
 				}
 				// check for hit
-				if (isValidDestination(board, figureColor, col - 1, targetRow)) {
-					moves.add(new Move(board, figureColor, figureType, col, row, col - 1, targetRow, false, true));
-				}
-				if (isValidDestination(board, figureColor, col + 1, targetRow)) {
-					moves.add(new Move(board, figureColor, figureType, col, row, col + 1, targetRow, false, true));
+				int[] colDirs = {-1, 1};
+				for (int colDir : colDirs) {
+					int targetCol = col + colDir;
+					if (isValidDestination(board, figureColor, targetCol, targetRow) && !isFree(board, targetCol, targetRow)) {
+						if (targetRow == rankRow(8, figureColor)) {
+							moves.add(new Move(board, figureColor, QUEEN, col, row, targetCol, targetRow, true, true));
+							moves.add(new Move(board, figureColor, ROOK, col, row, targetCol, targetRow, true, true));
+							moves.add(new Move(board, figureColor, BISHOP, col, row, targetCol, targetRow, true, true));
+							moves.add(new Move(board, figureColor, KNIGHT, col, row, targetCol, targetRow, true, true));
+						} else {
+							moves.add(new Move(board, figureColor, figureType, col, row, targetCol, targetRow, false, true));
+						}
+					}
 				}
 				// check en passant
 				if (board.getHistory().size() > 0) {

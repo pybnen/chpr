@@ -221,13 +221,14 @@ public class Board implements IBoard {
 	public String toString() {
 		String frame = "  +----+----+----+----+----+----+----+----+\n";
 		StringBuilder sb = new StringBuilder();
+		sb.append("    a    b    c    d    e    f    g    h\n");
 		for (int row = ROWS - 1; row >= 0; row--) {
 			sb.append(frame);
 			sb.append(row + 1);sb.append(" ");
 			for (int col = 0; col < COLS; col++) {
 				sb.append("| " + Figure.toString(figures[col][row]) + " ");
 			}
-			sb.append("|\n");
+			sb.append("| " + (row + 1) + "\n");
 		}
 		sb.append(frame);
 		sb.append("    a    b    c    d    e    f    g    h");
