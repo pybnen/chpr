@@ -147,10 +147,12 @@ public class Move {
 			return false;
 		if (fig != m.getFigureIndex())
 			return false;
-		// no need to check for hit, because when all is equal, then hit is also equal (when setHit() is used correctly)
+		if (hit != m.isHit())
+			return false;
+		if (prom != m.isProm())
+			return false;
 		// no need to check for color, its in figureIndex
 		// no need to check for type, its in figureIndex (fig)
-		// no need to check for promotion, because when all is equal, then promotion is also equal
 		return true;
 	}
 
