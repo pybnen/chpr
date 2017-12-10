@@ -35,21 +35,31 @@ public class Game {
 		int MAX_ROUNDS = 200;
 		int MAX_TIME = 500;
 
-		System.out.println(board.toString());
+
 		int currentColor = Figure.WHITE;
 
 		while (!whiteMat && !blackMat && !remis && round < MAX_ROUNDS) {
-			Move move;
+			System.out.println(BoardUtils.ColorToString(currentColor) + " to move");
+			System.out.println(board.toString());
+			System.out.println();
 
+			Move move;
 			if (currentColor == Figure.WHITE) {
 				move = whitePlayer.chooseMove(board, currentColor, MAX_TIME, random);
 			} else {
 				move = blackPlayer.chooseMove(board, currentColor, MAX_TIME, random);
 			}
 			board.executeMove(move);
-			// check if matt or remis
-			currentColor = BoardUtils.FlipColor(currentColor);
 
+			// TODO check for mat remis
+			currentColor = BoardUtils.FlipColor(currentColor);
+			if (board.isMat(currentColor)) {
+				if (currentColor == Figure.WHITE) {
+					whiteMat = true;
+				} else {
+					blackMat = true;
+				}
+			}
 			round++;
 		}
 

@@ -13,7 +13,7 @@ public class BoardUtils {
 	}
 
 	public static String ColorToString(int color) {
-		return null;
+		return color == 0 ? "white" : "black";
 	}
 
 	public static String ColumnName(int index) {
@@ -36,5 +36,9 @@ public class BoardUtils {
 			sb.append("\n");
 		}
 		return sb.toString();
+	}
+
+	public static boolean isIndex(String s) {
+		return s != null && s.matches("\\d+");
 	}
 }

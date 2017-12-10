@@ -37,15 +37,26 @@ public class HumanPlayer implements Player {
 			try {
 				System.out.print("Please enter your move: ");
 				String s = br.readLine();
-				m = Move.Import(s, board, color);
-				if (!moves.contains(m)) {
-					System.out.println("Invalid move!");
-					m = null;
+
+				if (BoardUtils.isIndex(s)) {
+					int idx = Integer.parseInt(s) - 1;
+					if (idx < 0 || idx > moves.size()) {
+						System.out.println("Invalid index!");
+					} else {
+						m = moves.get(idx);
+					}
+				} else {
+					m = Move.Import(s, board, color);
+					if (!moves.contains(m)) {
+						System.out.println("Invalid move!");
+						m = null;
+					}
 				}
 			} catch (Exception e) {
 				System.out.println("Move not recognised!");
 			}
 		}
+		System.out.println();
 		return m;
 	}
 }
