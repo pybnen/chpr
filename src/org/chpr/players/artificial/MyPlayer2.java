@@ -12,12 +12,12 @@ import java.util.Random;
 import static java.lang.Thread.sleep;
 
 
-public class MyPlayer implements Player {
+public class MyPlayer2 implements Player {
 
 	private Map<Integer, Double> figureValues;
 	private static final double KING_VALUE = 10000.0;
 
-	public MyPlayer() {
+	public MyPlayer2() {
 		figureValues = new HashMap<>();
 		figureValues.put(Figure.PAWN, 1.0);
 		figureValues.put(Figure.KNIGHT, 3.3);
@@ -52,13 +52,7 @@ public class MyPlayer implements Player {
 	@Override
 	public Move chooseMove(IBoard board, int color, int milliSeconds, Random random) {
 		Thinker thinker = new Thinker(this, board, color, random);
-		Thread t = new Thread(thinker);
-		t.start();
-		try {
-			sleep(milliSeconds);
-		} catch (InterruptedException ignored) {
-		}
-		t.stop();
+		thinker.run();
 		return thinker.getBestMove();
 	}
 }

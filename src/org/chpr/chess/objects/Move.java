@@ -129,14 +129,28 @@ public class Move {
 	}
 
 	@Override
+	public int hashCode() {
+		int result = color;
+		result = 31 * result + type;
+		result = 31 * result + sourceCol;
+		result = 31 * result + sourceRow;
+		result = 31 * result + destCol;
+		result = 31 * result + destRow;
+		result = 31 * result + fig;
+		result = 31 * result + (hit ? 1 : 0);
+		result = 31 * result + (prom ? 1 : 0);
+		return result;
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if (obj.getClass() != Move.class)
 			return false;
 		Move m = (Move)obj;
 		if (color != m.getColor())
 			return false;
-		if (!board.equals(m.getBoard()))
-			return false;
+//		if (!board.equals(m.getBoard()))
+//			return false;
 		if (sourceCol != m.getSourceCol())
 			return false;
 		if (sourceRow != m.getSourceRow())

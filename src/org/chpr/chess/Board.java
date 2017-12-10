@@ -199,8 +199,28 @@ public class Board implements IBoard {
 	}
 
 	@Override
+	public boolean canWhiteCastleQueenside() {
+		return canWhiteCastleQueenside;
+	}
+
+	@Override
+	public boolean canWhiteCastleKingside() {
+		return canWhiteCastleKingside;
+	}
+
+	@Override
 	public boolean canBlackCastle() {
 		return canBlackCastleKingside || canBlackCastleQueenside;
+	}
+
+	@Override
+	public boolean canBlackCastleQueenside() {
+		return canBlackCastleQueenside;
+	}
+
+	@Override
+	public boolean canBlackCastleKingside() {
+		return canBlackCastleKingside;
 	}
 
 	@Override

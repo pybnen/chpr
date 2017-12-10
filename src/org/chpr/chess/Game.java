@@ -5,10 +5,12 @@ import org.chpr.chess.objects.Move;
 import org.chpr.chess.utils.BoardUtils;
 import org.chpr.players.Player;
 import org.chpr.players.artificial.MyPlayer;
+import org.chpr.players.artificial.MyPlayer2;
 import org.chpr.players.human.HumanPlayer;
 import org.chpr.players.random.RandomPlayer;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 public class Game {
@@ -17,15 +19,21 @@ public class Game {
 		Random random = new Random(seed);
 
 		Board board = new Board();
+		short[][] figures = new short[8][8];
 
-		Player whitePlayer = new HumanPlayer();
-		Player blackPlayer = new RandomPlayer();
+		//figures[2][1] = Figure.PAWN + Figure.BLACK_OFFSET;
+//		figures[2][1] = Figure.BISHOP + Figure.BLACK_OFFSET;
+//		figures[3][7] = Figure.KING + Figure.BLACK_OFFSET;
+//
+//		figures[6][0] = Figure.KING + Figure.WHITE_OFFSET;
+//		//figures[7][0] = Figure.QUEEN + Figure.WHITE_OFFSET;
+//
+//		board.setFigures(figures);
 
-		// Player whitePlayer = new HumanPlayer();
-		// Player blackPlayer = new MyPlayer();
+		//Player whitePlayer = new HumanPlayer();Player blackPlayer = new HumanPlayer();
+		Player whitePlayer = new HumanPlayer();Player blackPlayer = new MyPlayer();
+		//Player whitePlayer = new MyPlayer2();Player blackPlayer = new HumanPlayer();
 
-		// Player whitePlayer = new MyPlayer();
-		// Player blackPlayer = new HumanPlayerGUI();
 
 		boolean whiteMat = false;
 		boolean blackMat = false;
@@ -51,13 +59,17 @@ public class Game {
 			}
 			board.executeMove(move);
 
-			// TODO check for mat remis
 			currentColor = BoardUtils.FlipColor(currentColor);
 			if (board.isMat(currentColor)) {
 				if (currentColor == Figure.WHITE) {
 					whiteMat = true;
 				} else {
 					blackMat = true;
+				}
+			} else {
+				List<Move> validMoves = board.getValidMoves(currentColor);
+				if (Figure.getSafeMoves(board, validMoves).size() == 0) {
+					remis = true;
 				}
 			}
 			round++;

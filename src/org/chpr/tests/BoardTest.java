@@ -2,6 +2,9 @@ package org.chpr.tests;
 
 import org.chpr.chess.Board;
 import org.chpr.chess.IBoard;
+import org.chpr.chess.objects.Figure;
+import org.chpr.players.Player;
+import org.chpr.players.artificial.MyPlayer;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -17,11 +20,13 @@ import static org.junit.Assert.*;
 
 @RunWith(Arquillian.class)
 public class BoardTest {
-
-	private IBoard board;
+	private double delta = 0.00001;
+	private Board board;
+	private int currentColor;
 
 	@Before
 	public void setUp() throws Exception {
+		currentColor = Figure.WHITE;
 		board = new Board();
 	}
 
@@ -31,53 +36,26 @@ public class BoardTest {
 	}
 
 	@Test
-	public void getFigures() throws Exception {
-	}
+	public void testMyPlayer() throws Exception {
+		short[][] figures = new short[8][8];
 
-	@Test
-	public void setFigure() throws Exception {
-	}
+		figures[2][4] = Figure.PAWN + Figure.BLACK_OFFSET;
+		figures[7][4] = Figure.ROOK + Figure.BLACK_OFFSET;
+		figures[4][4] = Figure.ROOK + Figure.WHITE_OFFSET;
+		board.setFigures(figures);
 
-	@Test
-	public void reset() throws Exception {
-	}
+		Player p = new MyPlayer();
+		double fitness = p.getFitness(board, currentColor);
+		assertEquals(fitness, -1.0, delta);
 
-	@Test
-	public void cloneIncompletely() throws Exception {
-	}
 
-	@Test
-	public void getValidMoves() throws Exception {
-	}
-
-	@Test
-	public void getValidMoves1() throws Exception {
-	}
-
-	@Test
-	public void getHistory() throws Exception {
-	}
-
-	@Test
-	public void executeMove() throws Exception {
-	}
-
-	@Test
-	public void canWhiteCastle() throws Exception {
-	}
-
-	@Test
-	public void canBlackCastle() throws Exception {
-	}
-
-	@Test
-	public void isMat() throws Exception {
 	}
 
 	@Deployment
 	public static JavaArchive createDeployment() {
 		return ShrinkWrap.create(JavaArchive.class)
 				.addClass(org.chpr.chess.IBoard.class)
+				.addClass(org.chpr.chess.Board.class)
 				.addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
 	}
 

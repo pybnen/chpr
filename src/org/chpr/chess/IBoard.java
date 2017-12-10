@@ -73,11 +73,39 @@ public interface IBoard {
 	boolean canWhiteCastle();
 
 	/**
+	 * Check if white can still castle on queenside
+	 *
+	 * @return true, if white can still castle on queenside
+	 */
+	boolean canWhiteCastleQueenside();
+
+	/**
+	 * Check if white can still castle on kingside
+	 *
+	 * @return true, if white can still castle on kingside
+	 */
+	boolean canWhiteCastleKingside();
+
+	/**
 	 * Check if black can still castle
 	 *
 	 * @return true, if black can still castle
 	 */
 	boolean canBlackCastle();
+
+	/**
+	 * Check if black can still castle on queenside
+	 *
+	 * @return true, if black can still castle on queenside
+	 */
+	boolean canBlackCastleQueenside();
+
+	/**
+	 * Check if black can still castle on kingside
+	 *
+	 * @return true, if black can still castle on kingside
+	 */
+	boolean canBlackCastleKingside();
 
 	/**
 	 * Check if color is in mat

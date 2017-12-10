@@ -162,7 +162,34 @@ public class Figure {
 						moves.add(new Move(board, figureColor, figureType, col, row, destCol, destRow, false, hit));
 					}
 				}
-				// TODO castle
+				if (figureColor == WHITE && board.canWhiteCastle() && col == 4 && row == 0) {
+					short kingsideRook = figures[7][0];
+					short queensideRook = figures[0][0];
+					if (board.canWhiteCastleKingside()) {
+						if (isFree(board, 5, 0) && isFree(board, 6, 0) && getType(kingsideRook) == ROOK && getColor(kingsideRook) == WHITE) {
+							moves.add(new Move(board, figureColor, figureType, col, row, 6, 0, false, false));
+						}
+					}
+					if (board.canWhiteCastleQueenside()) {
+						if (isFree(board, 2, 0) && isFree(board, 3, 0) && getType(queensideRook) == ROOK && getColor(queensideRook) == WHITE) {
+							moves.add(new Move(board, figureColor, figureType, col, row, 2, 0, false, false));
+						}
+					}
+				}
+				if (figureColor == BLACK && board.canBlackCastle() && col == 4 && row == 7) {
+					short kingsideRook = figures[7][7];
+					short queensideRook = figures[0][7];
+					if (board.canBlackCastleKingside()) {
+						if (isFree(board, 5, 7) && isFree(board, 6, 7) && getType(kingsideRook) == ROOK && getColor(kingsideRook) == BLACK) {
+							moves.add(new Move(board, figureColor, figureType, col, row, 6, 7, false, false));
+						}
+					}
+					if (board.canBlackCastleQueenside()) {
+						if (isFree(board, 2, 7) && isFree(board, 3, 7) && getType(queensideRook) == ROOK && getColor(queensideRook) == BLACK) {
+							moves.add(new Move(board, figureColor, figureType, col, row, 2, 7, false, false));
+						}
+					}
+				}
 			}
 		}
 		return moves;
@@ -217,6 +244,33 @@ public class Figure {
 		short[][] figures = board.getFigures();
 		short fig = figures[col][row];
 		return fig == 0;
+	}
+
+	static public List<Move> getSafeMoves(IBoard board, List<Move> moves) {
+		List<Move> safeMoves = new ArrayList<>();
+		for (Move move : moves) {
+			IBoard b = board.cloneIncompletely();
+			b.executeMove(move);
+			List<Move> nextMoves = b.getValidMoves(BoardUtils.FlipColor(move.getColor()));
+			boolean isSafe = true;
+			for (Move nextMove : nextMoves) {
+				if (hitsKing(b, nextMove)) {
+					isSafe = false;
+					break;
+				}
+			}
+			if (isSafe) {
+				safeMoves.add(move);
+			}
+		}
+		return safeMoves;
+	}
+
+	static public boolean hitsKing(IBoard board, Move m) {
+		if (m.isHit()) {
+			return getType(board.getFigures()[m.getDestCol()][m.getDestRow()]) == KING;
+		}
+		return false;
 	}
 
 	/**

@@ -1,6 +1,7 @@
 package org.chpr.players.human;
 
 import org.chpr.chess.IBoard;
+import org.chpr.chess.objects.Figure;
 import org.chpr.chess.objects.Move;
 import org.chpr.chess.utils.BoardUtils;
 import org.chpr.players.Player;
@@ -29,7 +30,9 @@ public class HumanPlayer implements Player {
 	@Override
 	public Move chooseMove(IBoard board, int color, int milliSeconds, Random random) {
 		List<Move> moves = board.getValidMoves(color);
-		System.out.println();
+		// for the human player only allow moves that leaves the king save
+		moves = Figure.getSafeMoves(board, moves);
+		System.out.println("Safe:");
 		System.out.println(BoardUtils.formatMovesList(moves));
 
 		Move m = null;
