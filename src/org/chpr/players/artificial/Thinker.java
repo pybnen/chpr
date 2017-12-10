@@ -1,7 +1,6 @@
 package org.chpr.players.artificial;
 
 import org.chpr.chess.IBoard;
-import org.chpr.chess.objects.Figure;
 import org.chpr.chess.objects.Move;
 import org.chpr.chess.utils.BoardUtils;
 import org.chpr.players.Player;
@@ -21,8 +20,6 @@ public class Thinker implements Runnable {
 	private double bestFitness;
 
 	private static final double REAL_LOW_VALUE = -10000.0;
-	private static final double REAL_HIGH_VALUE = 10000.0;
-
 
 	public Thinker(Player player, IBoard board, int color, Random random) {
 		this.player = player;
@@ -36,7 +33,7 @@ public class Thinker implements Runnable {
 	@Override
 	public void run() {
 		int level = 1;
-		while (level < 5) {
+		while (true) {
 			List<Move> curBestMoves = new ArrayList<>();
 			double curBestFitness = REAL_LOW_VALUE;
 			List<Move> moves = board.getValidMoves(color);
@@ -53,13 +50,10 @@ public class Thinker implements Runnable {
 					if (!curBestMoves.contains(m)) {
 						curBestMoves.add(m);
 					}
-
 				}
 			}
-
 			bestMoves = curBestMoves;
 			bestFitness = curBestFitness;
-
 			level++;
 		}
 	}
@@ -71,14 +65,9 @@ public class Thinker implements Runnable {
 			double max = REAL_LOW_VALUE;
 			List<Move> moves = b.getValidMoves(color);
 			for (Move m : moves) {
-				double d = 0.0;
-//				if (Figure.hitKing(b, m)) {
-//					d = REAL_HIGH_VALUE;
-//				} else {
-					IBoard tmp = b.cloneIncompletely();
-					tmp.executeMove(m);
-					d = evaluate(tmp, BoardUtils.FlipColor(color), level - 1);
-//				}
+				IBoard tmp = b.cloneIncompletely();
+				tmp.executeMove(m);
+				double d = evaluate(tmp, BoardUtils.FlipColor(color), level - 1);
 
 				if (d > max) {
 					max = d;
@@ -90,7 +79,6 @@ public class Thinker implements Runnable {
 
 	public Move getBestMove() {
 		List<Move> bestEval0Moves = new ArrayList<>();
-		// chose the one with be best eval0 val
 		double maxEval0 = REAL_LOW_VALUE;
 		for (Move move : bestMoves) {
 			IBoard tmp = board.cloneIncompletely();
@@ -104,7 +92,6 @@ public class Thinker implements Runnable {
 				bestEval0Moves.add(move);
 			}
 		}
-
 		return bestEval0Moves.get(random.nextInt(bestEval0Moves.size()));
 	}
 }

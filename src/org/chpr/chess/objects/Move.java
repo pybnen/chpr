@@ -117,14 +117,6 @@ public class Move {
 		if (prom)
 			ret = ret.concat(Figure.toString(fig));
 
-//		short[][] b = board.getFigures();
-//		for (int column = 0; column < b.length; column++) {
-//			for (int row = 0; row < b[0].length; row++) {
-//				if (b[column][row] == Figure.KING + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET)) {
-//					// TODO check for check, need valid moves for this
-//				}
-//			}
-//		}
 		return ret;
 	}
 

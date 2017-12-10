@@ -27,7 +27,6 @@ public class MyPlayer implements Player {
 		figureValues.put(Figure.KING, KING_VALUE);
 	}
 
-	@SuppressWarnings("Duplicates")
 	@Override
 	public double getFitness(IBoard board, int color) {
 		double fitness = 0.0;
