@@ -18,7 +18,7 @@ public class Game {
 
 		Board board = new Board();
 
-		Player whitePlayer = new HumanPlayer();
+		Player whitePlayer = new MyPlayer();
 		Player blackPlayer = new MyPlayer();
 
 		boolean whiteMat = false;
