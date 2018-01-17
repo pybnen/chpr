@@ -1,4 +1,4 @@
-package org.chpr;
+package org.chpr.tests;
 
 import org.chpr.chess.Board;
 import org.chpr.chess.IBoard;
@@ -16,7 +16,7 @@ public class ValidMovesTest {
 		currentColor = Figure.WHITE;
 		board = new Board();
 		short[][] figures = new short[8][8];
-		figures[4][3] = Figure.ROOK + Figure.WHITE_OFFSET;
+		figures[4][3] = (short)Figure.ROOK + Figure.WHITE_OFFSET;
 
 		figures[2][3] = Figure.PAWN + Figure.WHITE_OFFSET;
 		figures[4][6] = Figure.QUEEN + Figure.BLACK_OFFSET;

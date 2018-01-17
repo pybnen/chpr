@@ -1,4 +1,4 @@
-package org.chpr;
+package org.chpr.tests;
 
 import org.chpr.chess.Board;
 import org.chpr.chess.IBoard;
