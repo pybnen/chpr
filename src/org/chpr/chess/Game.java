@@ -6,6 +6,7 @@ import org.chpr.chess.utils.BoardUtils;
 import org.chpr.players.Player;
 import org.chpr.players.artificial.MyPlayer;
 import org.chpr.players.human.HumanPlayer;
+import org.chpr.players.human.HumanPlayerGUI;
 
 import java.util.Date;
 import java.util.List;
@@ -18,7 +19,7 @@ public class Game {
 
 		Board board = new Board();
 
-		Player whitePlayer = new MyPlayer();
+		Player whitePlayer = new HumanPlayerGUI();
 		Player blackPlayer = new MyPlayer();
 
 		boolean whiteMat = false;
