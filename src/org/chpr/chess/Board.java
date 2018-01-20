@@ -222,6 +222,257 @@ public class Board implements IBoard {
 	public boolean canBlackCastleKingside() {
 		return canBlackCastleKingside;
 	}
+	
+	@Override
+	public boolean isCheck(int color) {
+		// look for king
+		int col = -1;
+		int row = -1;
+		for (int i = 0; i < figures.length; i++) {
+			for (int j = 0; j < figures[i].length; j++) {
+				if (figures[i][j] == (Figure.KING + (color == Figure.WHITE ? Figure.WHITE_OFFSET : Figure.BLACK_OFFSET))) {
+					col = i;
+					row = j;
+				}
+			}	
+		}
+		if (col == -1)
+			return false;
+		// check if under attack
+		// by pawn
+		int oppCol = 0;
+		int oppRow = 0;
+		if (color == Figure.WHITE) {
+			oppCol = col + 1;
+			oppRow = row + 1;
+			if (oppCol >= 0 && oppCol <= 7 && oppRow >= 0 && oppRow <= 7) {
+				if (figures[oppCol][oppRow] == Figure.PAWN + Figure.BLACK_OFFSET)
+					return true;
+			}
+			oppCol = col - 1;
+			oppRow = row + 1;
+			if (oppCol >= 0 && oppCol <= 7 && oppRow >= 0 && oppRow <= 7) {
+				if (figures[oppCol][oppRow] == Figure.PAWN + Figure.BLACK_OFFSET)
+					return true;
+			}
+		}
+		else {
+			oppCol = col + 1;
+			oppRow = row - 1;
+			if (oppCol >= 0 && oppCol <= 7 && oppRow >= 0 && oppRow <= 7) {
+				if (figures[oppCol][oppRow] == Figure.PAWN + Figure.WHITE_OFFSET)
+					return true;
+			}
+			oppCol = col - 1;
+			oppRow = row - 1;
+			if (oppCol >= 0 && oppCol <= 7 && oppRow >= 0 && oppRow <= 7) {
+				if (figures[oppCol][oppRow] == Figure.PAWN + Figure.WHITE_OFFSET)
+					return true;
+			}
+		}
+		// by knight
+		oppCol = col + 1;
+		oppRow = row + 2;
+		if (oppCol >= 0 && oppCol <= 7 && oppRow >= 0 && oppRow <= 7) {
+			if (figures[oppCol][oppRow] == Figure.KNIGHT + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET))
+				return true;
+		}
+		oppCol = col + 2;
+		oppRow = row + 1;
+		if (oppCol >= 0 && oppCol <= 7 && oppRow >= 0 && oppRow <= 7) {
+			if (figures[oppCol][oppRow] == Figure.KNIGHT + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET))
+				return true;
+		}
+		
+		oppCol = col + 1;
+		oppRow = row - 2;
+		if (oppCol >= 0 && oppCol <= 7 && oppRow >= 0 && oppRow <= 7) {
+			if (figures[oppCol][oppRow] == Figure.KNIGHT + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET))
+				return true;
+		}
+		oppCol = col + 2;
+		oppRow = row - 1;
+		if (oppCol >= 0 && oppCol <= 7 && oppRow >= 0 && oppRow <= 7) {
+			if (figures[oppCol][oppRow] == Figure.KNIGHT + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET))
+				return true;
+		}
+		
+		oppCol = col - 1;
+		oppRow = row + 2;
+		if (oppCol >= 0 && oppCol <= 7 && oppRow >= 0 && oppRow <= 7) {
+			if (figures[oppCol][oppRow] == Figure.KNIGHT + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET))
+				return true;
+		}
+		oppCol = col - 2;
+		oppRow = row + 1;
+		if (oppCol >= 0 && oppCol <= 7 && oppRow >= 0 && oppRow <= 7) {
+			if (figures[oppCol][oppRow] == Figure.KNIGHT + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET))
+				return true;
+		}
+		
+		oppCol = col - 1;
+		oppRow = row - 2;
+		if (oppCol >= 0 && oppCol <= 7 && oppRow >= 0 && oppRow <= 7) {
+			if (figures[oppCol][oppRow] == Figure.KNIGHT + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET))
+				return true;
+		}
+		oppCol = col - 2;
+		oppRow = row - 1;
+		if (oppCol >= 0 && oppCol <= 7 && oppRow >= 0 && oppRow <= 7) {
+			if (figures[oppCol][oppRow] == Figure.KNIGHT + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET))
+				return true;
+		}
+		// by bishop or queen
+		int curCol = col - 1;
+		int curRow = row - 1;
+		while (curCol >= 0 && curRow >= 0) {
+			if (figures[curCol][curRow] == 0) {
+				curCol--;
+				curRow--;
+				continue;
+			}
+			if (figures[curCol][curRow] == Figure.BISHOP + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET) || figures[curCol][curRow] == Figure.QUEEN + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET))
+				return true;
+			else
+				break;
+			
+		}
+		curCol = col - 1;
+		curRow = row + 1;
+		while (curCol >= 0 && curRow <= 7) {
+			if (figures[curCol][curRow] == 0) {
+				curCol--;
+				curRow++;
+				continue;
+			}
+			if (figures[curCol][curRow] == Figure.BISHOP + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET) || figures[curCol][curRow] == Figure.QUEEN + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET))
+				return true;
+			else
+				break;
+		}
+		curCol = col + 1;
+		curRow = row - 1;
+		while (curCol <= 7 && curRow >= 0) {
+			if (figures[curCol][curRow] == 0) {
+				curCol++;
+				curRow--;
+				continue;
+			}
+			if (figures[curCol][curRow] == Figure.BISHOP + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET) || figures[curCol][curRow] == Figure.QUEEN + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET))
+				return true;
+			else
+				break;
+		}
+		curCol = col + 1;
+		curRow = row + 1;
+		while (curCol <= 7 && curRow <= 7) {
+			if (figures[curCol][curRow] == 0) {
+				curCol++;
+				curRow++;
+				continue;
+			}
+			if (figures[curCol][curRow] == Figure.BISHOP + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET) || figures[curCol][curRow] == Figure.QUEEN + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET))
+				return true;
+			else
+				break;
+		}
+		
+		// by rook or queen
+		curCol = col - 1;
+		curRow = row;
+		while (curCol >= 0) {
+			if (figures[curCol][curRow] == 0) {
+				curCol--;
+				continue;
+			}
+			if (figures[curCol][curRow] == Figure.ROOK + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET) || figures[curCol][curRow] == Figure.QUEEN + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET))
+				return true;
+			else
+				break;
+			
+		}
+		curCol = col + 1;
+		curRow = row;
+		while (curCol <= 7) {
+			if (figures[curCol][curRow] == 0) {
+				curCol++;
+				continue;
+			}
+			if (figures[curCol][curRow] == Figure.ROOK + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET) || figures[curCol][curRow] == Figure.QUEEN + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET))
+				return true;
+			else
+				break;
+		}
+		curCol = col;
+		curRow = row - 1;
+		while (curRow >= 0) {
+			if (figures[curCol][curRow] == 0) {
+				curRow--;
+				continue;
+			}
+			if (figures[curCol][curRow] == Figure.ROOK + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET) || figures[curCol][curRow] == Figure.QUEEN + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET))
+				return true;
+			else
+				break;
+		}
+		curRow = row + 1;
+		while (curRow <= 7) {
+			if (figures[curCol][curRow] == 0) {
+				curRow++;
+				continue;
+			}
+			if (figures[curCol][curRow] == Figure.ROOK + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET) || figures[curCol][curRow] == Figure.QUEEN + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET))
+				return true;
+			else
+				break;
+		}
+		
+		// by king
+		oppCol = col + 1;
+		oppRow = row;
+		if (oppCol >= 0 && oppCol <= 7 && oppRow >= 0 && oppRow <= 7) {
+			if (figures[oppCol][oppRow] == Figure.KING + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET))
+				return true;
+		}
+		oppCol = col + 1;
+		oppRow = row + 1;
+		if (oppCol >= 0 && oppCol <= 7 && oppRow >= 0 && oppRow <= 7) {
+			if (figures[oppCol][oppRow] == Figure.KING + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET))
+				return true;
+		}
+		
+		oppCol = col + 1;
+		oppRow = row - 1;
+		if (oppCol >= 0 && oppCol <= 7 && oppRow >= 0 && oppRow <= 7) {
+			if (figures[oppCol][oppRow] == Figure.KING + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET))
+				return true;
+		}
+		oppCol = col - 1;
+		oppRow = row;
+		if (oppCol >= 0 && oppCol <= 7 && oppRow >= 0 && oppRow <= 7) {
+			if (figures[oppCol][oppRow] == Figure.KING + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET))
+				return true;
+		}
+		oppCol = col - 1;
+		oppRow = row + 1;
+		if (oppCol >= 0 && oppCol <= 7 && oppRow >= 0 && oppRow <= 7) {
+			if (figures[oppCol][oppRow] == Figure.KING + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET))
+				return true;
+		}
+		oppCol = col;
+		oppRow = row + 1;
+		if (oppCol >= 0 && oppCol <= 7 && oppRow >= 0 && oppRow <= 7) {
+			if (figures[oppCol][oppRow] == Figure.KING + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET))
+				return true;
+		}
+		oppCol = col;
+		oppRow = row - 1;
+		if (oppCol >= 0 && oppCol <= 7 && oppRow >= 0 && oppRow <= 7) {
+			if (figures[oppCol][oppRow] == Figure.KING + (color == Figure.WHITE ? Figure.BLACK_OFFSET : Figure.WHITE_OFFSET))
+				return true;
+		}
+		return false;
+	}
 
 	@Override
 	public boolean isMat(int color) {

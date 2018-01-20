@@ -12,13 +12,12 @@ import java.util.Random;
 import static java.lang.Thread.sleep;
 
 
-public class UberPlayer implements Player {
+public class EvalMovementPlayer implements Player {
 
 	private Map<Integer, Double> figureValues;
-	private static Map<Integer, Double> figureValuesStat;
 	private static final double KING_VALUE = 10000.0;
 
-	public UberPlayer() {
+	public EvalMovementPlayer() {
 		figureValues = new HashMap<>();
 		figureValues.put(Figure.PAWN, 1.0);
 		figureValues.put(Figure.KNIGHT, 3.3);
@@ -27,42 +26,11 @@ public class UberPlayer implements Player {
 		figureValues.put(Figure.QUEEN, 9.0);
 		figureValues.put(Figure.KING, KING_VALUE);
 	}
-	
-	public static double eval0(IBoard board, int color) {
-		if (figureValuesStat == null) {
-			figureValuesStat = new HashMap<>();
-			figureValuesStat.put(Figure.PAWN, 1.0);
-			figureValuesStat.put(Figure.KNIGHT, 3.3);
-			figureValuesStat.put(Figure.BISHOP, 3.3);
-			figureValuesStat.put(Figure.ROOK, 5.0);
-			figureValuesStat.put(Figure.QUEEN, 9.0);
-			figureValuesStat.put(Figure.KING, KING_VALUE);
-			
-		}
-		double fitness = 0.0;
-		short[][] figures = board.getFigures();
-		for (int col = 0; col < figures.length; col++) {
-			for (int row = 0; row < figures[0].length; row++) {
-				short fig = figures[col][row];
-				if (fig > 0) {
-					int figureType = Figure.getType(fig);
-					double value = figureValuesStat.get(figureType);
-					if (Figure.getColor(fig) == color) {
-						fitness += value;
-					} else {
-						fitness -= value;
-					}
-				}
-			}
-		}
-		return fitness;
-	}
 
 	@Override
 	public double getFitness(IBoard board, int color) {
 		double fitness = 0.0;
 		short[][] figures = board.getFigures();
-		// compare piece values
 		for (int col = 0; col < figures.length; col++) {
 			for (int row = 0; row < figures[0].length; row++) {
 				short fig = figures[col][row];
@@ -77,7 +45,6 @@ public class UberPlayer implements Player {
 				}
 			}
 		}
-		
 		// compare movement of bishops, knights, rooks, queens
 		int numFieldsToMove = 0;
 		for (int col = 0; col < figures.length; col++) {
@@ -216,18 +183,19 @@ public class UberPlayer implements Player {
 		}
 		double moveFitness = numFieldsToMove / 50.0;
 		return fitness + moveFitness;
+
 	}
 
 	@Override
 	public Move chooseMove(IBoard board, int color, int milliSeconds, Random random) {
-		UberThinker UberThinker = new UberThinker(this, board, color, random);
-		Thread t = new Thread(UberThinker);
+		EvalMovementThinker thinker = new EvalMovementThinker(this, board, color, random);
+		Thread t = new Thread(thinker);
 		t.start();
 		try {
 			sleep(milliSeconds);
 		} catch (InterruptedException ignored) {
 		}
 		t.stop();
-		return UberThinker.getBestMove();
+		return thinker.getBestMove();
 	}
 }

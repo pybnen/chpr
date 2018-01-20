@@ -31,7 +31,7 @@ public class MyPlayerTest {
 		Player p = new MyPlayer();
 		double fitness = p.getFitness(board, currentColor);
 		System.out.println(fitness);
-		Move move = p.chooseMove(board, currentColor, 500, new Random());
+		Move move = p.chooseMove(board, currentColor, 5000, new Random());
 		System.out.println(move);
 	}
 
@@ -42,9 +42,10 @@ public class MyPlayerTest {
 
 		short[][] figures = new short[8][8];
 
-		figures[2][1] = Figure.PAWN + Figure.BLACK_OFFSET;
-		figures[2][4] = Figure.ROOK + Figure.WHITE_OFFSET;
-		figures[4][4] = Figure.ROOK + Figure.BLACK_OFFSET;
+		figures[4][1] = Figure.PAWN + Figure.BLACK_OFFSET;
+		figures[7][4] = Figure.ROOK + Figure.BLACK_OFFSET;
+		figures[4][4] = Figure.ROOK + Figure.WHITE_OFFSET;
+		
 		board.setFigures(figures);
 
 		Player p = new MyPlayer();
@@ -52,18 +53,22 @@ public class MyPlayerTest {
 		System.out.println(p.getFitness(board, Figure.WHITE));
 		TestHelper.printBoard(board);
 
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 15; i++) {
 
-			Move move = p.chooseMove(board, currentColor, 500, new Random());
+			Move move = p.chooseMove(board, currentColor, 1500, new Random());
+			if (move == null) {
+				System.out.println("...");
+				break;
+			}
 			board.executeMove(move);
 			System.out.println(move.toString() + " " + p.getFitness(board, Figure.WHITE));
+			System.out.println(move.toString() + " " + p.getFitness(board, Figure.BLACK));
+			System.out.println(move.toString() + " " + board.isCheck(Figure.WHITE));
+			System.out.println(move.toString() + " " + board.isCheck(Figure.BLACK));
 			TestHelper.printBoard(board);
 
 			currentColor = BoardUtils.FlipColor(currentColor);
 
 		}
 	}
-
-
-
 }

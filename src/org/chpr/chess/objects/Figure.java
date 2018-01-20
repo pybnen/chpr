@@ -77,7 +77,8 @@ public class Figure {
 		List<Move> moves = new ArrayList<>();
 		short[][] figures = board.getFigures();
 		short figureIndex = figures[col][row];
-
+		int color = getColor(figureIndex);
+		
 		if (figureIndex != 0) {
 			int figureType = getType(figureIndex);
 			int figureColor = getColor(figureIndex);
@@ -192,7 +193,16 @@ public class Figure {
 				}
 			}
 		}
-		return moves;
+		// remove moves that leave the color in check
+		List<Move> movesWithoutLosingKing = new ArrayList<Move>();
+		for (Move move : moves) {
+			IBoard tmp = board.cloneIncompletely();
+			tmp.executeMove(move);
+			if (!tmp.isCheck(color))
+				movesWithoutLosingKing.add(move);
+		}
+		
+		return movesWithoutLosingKing;
 	}
 
 	private static List<Move> searchValidMoves(IBoard board, int col, int row, int figureType, int figureColor, int[][] directions) {

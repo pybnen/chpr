@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Random;
 
 
-public class Thinker implements Runnable {
+public class AlphaBetaThinker implements Runnable {
 
 	private Player player;
 	private IBoard board;
@@ -19,9 +19,9 @@ public class Thinker implements Runnable {
 	private List<Move> bestMoves;
 	private double bestFitness;
 
-	private static final double REAL_LOW_VALUE = -10000.0;
+	private static final double REAL_LOW_VALUE = Double.NEGATIVE_INFINITY;
 
-	public Thinker(Player player, IBoard board, int color, Random random) {
+	public AlphaBetaThinker(Player player, IBoard board, int color, Random random) {
 		this.player = player;
 		this.board = board;
 		this.color = color;
@@ -34,15 +34,15 @@ public class Thinker implements Runnable {
 	public void run() {
 		int level = 1;
 		while (true) {
-			System.out.println("current level of myPlayer: " + level);
+			System.out.println("current level of alphaBetaPlayer: " + level);
 			List<Move> curBestMoves = new ArrayList<>();
 			double curBestFitness = REAL_LOW_VALUE;
 			List<Move> moves = board.getValidMoves(color);
-
+			moves.sort(BoardUtils.moveComp);
 			for (Move m : moves) {
 				IBoard b = board.cloneIncompletely();
 				b.executeMove(m);
-				double fitness = evaluate(b, BoardUtils.FlipColor(color), level - 1);
+				double fitness = evaluate(b, BoardUtils.FlipColor(color), level - 1, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
 				if (fitness >= curBestFitness) {
 					if (fitness > curBestFitness) {
 						curBestMoves = new ArrayList<>();
@@ -59,19 +59,31 @@ public class Thinker implements Runnable {
 		}
 	}
 
-	public double evaluate(IBoard b, int color, int level) {
+	public double evaluate(IBoard b, int color, int level, double alpha, double beta) {
 		if (level == 0) {
 			return player.getFitness(b, color) * -1;
 		} else {
 			double max = REAL_LOW_VALUE;
 			List<Move> moves = b.getValidMoves(color);
+			moves.sort(BoardUtils.moveComp);
+			if (moves.size() == 0) {
+				// check for patt
+				if (!board.isCheck(color))
+					return 0;
+				else
+					return player.getFitness(b, color) * -1;	
+			}
 			for (Move m : moves) {
 				IBoard tmp = b.cloneIncompletely();
 				tmp.executeMove(m);
-				double d = evaluate(tmp, BoardUtils.FlipColor(color), level - 1);
-
-				if (d > max) {
+				double d = evaluate(tmp, BoardUtils.FlipColor(color), level - 1, -beta, -alpha);
+				if (d > max)
 					max = d;
+				if (d > alpha) {
+					alpha = d;
+				if (alpha >= beta)
+					break;
+				
 				}
 			}
 			return max * -1;
@@ -93,6 +105,8 @@ public class Thinker implements Runnable {
 				bestEval0Moves.add(move);
 			}
 		}
+		if (bestEval0Moves.size() == 0)
+			return null;
 		return bestEval0Moves.get(random.nextInt(bestEval0Moves.size()));
 	}
 }

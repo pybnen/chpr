@@ -106,7 +106,15 @@ public interface IBoard {
 	 * @return true, if black can still castle on kingside
 	 */
 	boolean canBlackCastleKingside();
-
+	
+	/**
+	 * Check if color is in check
+	 *
+	 * @param color color which should be checked for
+	 * @return true, if color is in check
+	 */
+	boolean isCheck(int color);
+	
 	/**
 	 * Check if color is in mat
 	 *
@@ -114,4 +122,6 @@ public interface IBoard {
 	 * @return true, if color is in mat
 	 */
 	boolean isMat(int color);
+
+	
 }

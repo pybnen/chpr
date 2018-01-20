@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Random;
 
 
-public class Thinker implements Runnable {
+public class EvalMovementThinker implements Runnable {
 
 	private Player player;
 	private IBoard board;
@@ -21,7 +21,7 @@ public class Thinker implements Runnable {
 
 	private static final double REAL_LOW_VALUE = -10000.0;
 
-	public Thinker(Player player, IBoard board, int color, Random random) {
+	public EvalMovementThinker(Player player, IBoard board, int color, Random random) {
 		this.player = player;
 		this.board = board;
 		this.color = color;
@@ -34,7 +34,7 @@ public class Thinker implements Runnable {
 	public void run() {
 		int level = 1;
 		while (true) {
-			System.out.println("current level of myPlayer: " + level);
+			System.out.println("current level of evalMovementPlayer: " + level);
 			List<Move> curBestMoves = new ArrayList<>();
 			double curBestFitness = REAL_LOW_VALUE;
 			List<Move> moves = board.getValidMoves(color);
