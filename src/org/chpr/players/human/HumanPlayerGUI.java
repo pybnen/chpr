@@ -9,6 +9,12 @@ import org.chpr.players.Player;
 import java.util.Random;
 
 public class HumanPlayerGUI implements Player {
+	private PlayerGUI gui;
+
+	public HumanPlayerGUI(PlayerGUI gui) {
+		this.gui = gui;
+	}
+
 	@Override
 	public double getFitness(IBoard board, int color) {
 		return 0.0;
@@ -16,20 +22,16 @@ public class HumanPlayerGUI implements Player {
 
 	@Override
 	public Move chooseMove(IBoard board, int color, int milliSeconds, Random random) {
-		PlayerGUI gui = new PlayerGUI(board, color);
-		gui.setAlwaysOnTop(true);
-		Thread thread = new Thread(() -> {
-			gui.setBounds(10, 10, 420, 180);
-			gui.show();
-		});
-		thread.start();
-		while (gui.move == null) {
+		gui.allowMove(color);
+
+		Move playerMove = gui.getMoveAndReset();
+		while (playerMove == null) {
 			try {
 				Thread.sleep(50);
 			} catch (Exception ignored) {
 			}
+			playerMove = gui.getMoveAndReset();
 		}
-		gui.dispose();
-		return gui.move;
+		return playerMove;
 	}
 }

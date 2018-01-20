@@ -25,15 +25,15 @@ public class PlayerGUI extends JFrame {
 
 	private IBoard board;
 	int myColor = -1;
-	public Move move;
+	private Move move;
 	private static String imgPath;
 	private boolean figureSelected;
 	int selectedRow = 0;
 	int selectedCol = 0;
+	boolean allowSelect = false;
 
-	public PlayerGUI(IBoard board, int color) {
+	public PlayerGUI(IBoard board) {
 		this.board = board;
-		this.myColor = color;
 		this.move = null;
 		imgPath = getClass().getProtectionDomain().getCodeSource().getLocation().getPath() + REL_IMG_DIR;
 
@@ -42,7 +42,7 @@ public class PlayerGUI extends JFrame {
 	}
 
 	private void initWindow() {
-		setTitle("My Chess v0.1 its your turn " + BoardUtils.ColorToString(myColor) + "!");
+		setTitle("My Chess v0.1");
 		addWindowListener(new WindowListener() {
 			@Override
 			public void windowOpened(WindowEvent e) {
@@ -109,51 +109,53 @@ public class PlayerGUI extends JFrame {
 	}
 
 	private void reactOnClick(int x, int y) {
-		int col = (x - LEFT_OFFSET) / CELLSIZE;
-		int row = 7 - (y - TOP_OFFSET) / CELLSIZE;
+		if (allowSelect) {
+			int col = (x - LEFT_OFFSET) / CELLSIZE;
+			int row = 7 - (y - TOP_OFFSET) / CELLSIZE;
 
-		if (!(col >= 0 && col < 8 && row >= 0 && row < 8)) {
-			figureSelected = false;
-			this.repaint();
-			return;
-		}
-
-		if (!figureSelected) {
-			short figureIndex = board.getFigures()[col][row];
-			if (figureIndex > 0 && Figure.getColor(figureIndex) == myColor) {
-				selectedCol = col;
-				selectedRow = row;
-				figureSelected = true;
+			if (!(col >= 0 && col < 8 && row >= 0 && row < 8)) {
+				figureSelected = false;
+				this.repaint();
+				return;
 			}
-		} else {
-			short figureIndex = board.getFigures()[selectedCol][selectedRow];
-			int figure = Figure.getType(figureIndex);
-			boolean newType = false;
-			if (figure == Figure.PAWN) {
-				if ((myColor == Figure.BLACK && row == 0) || (myColor == Figure.WHITE && row == 7)) {
-					// promote
-					figure = Figure.QUEEN;
-					newType = true;
+
+			if (!figureSelected) {
+				short figureIndex = board.getFigures()[col][row];
+				if (figureIndex > 0 && Figure.getColor(figureIndex) == myColor) {
+					selectedCol = col;
+					selectedRow = row;
+					figureSelected = true;
+				}
+			} else {
+				short figureIndex = board.getFigures()[selectedCol][selectedRow];
+				int figure = Figure.getType(figureIndex);
+				boolean newType = false;
+				if (figure == Figure.PAWN) {
+					if ((myColor == Figure.BLACK && row == 0) || (myColor == Figure.WHITE && row == 7)) {
+						// promote
+						figure = Figure.QUEEN;
+						newType = true;
+					}
+				}
+				List<Move> moves = board.getValidMoves(myColor);
+				// for the human player only allow moves that leaves the king save
+				moves = Figure.getSafeMoves(board, moves);
+
+				// just try none hit/hit version of move, otherwise we would have to check for en passant again
+				Move moveNoHit = new Move(board, myColor, figure, selectedCol, selectedRow, col, row, newType, false);
+				Move moveHit = new Move(board, myColor, figure, selectedCol, selectedRow, col, row, newType, true);
+
+
+				if (moves.contains(moveNoHit)) {
+					move = moveNoHit;
+				} else if (moves.contains(moveHit)) {
+					move = moveHit;
+				} else {
+					figureSelected = false;
 				}
 			}
-			List<Move> moves = board.getValidMoves(myColor);
-			// for the human player only allow moves that leaves the king save
-			moves = Figure.getSafeMoves(board, moves);
-
-			// just try none hit/hit version of move, otherwise we would have to check for en passant again
-			Move moveNoHit = new Move(board, myColor, figure, selectedCol, selectedRow, col, row, newType, false);
-			Move moveHit = new Move(board, myColor, figure, selectedCol, selectedRow, col, row, newType, true);
-
-
-			if (moves.contains(moveNoHit)) {
-				move = moveNoHit;
-			} else if(moves.contains(moveHit)) {
-				move = moveHit;
-			} else {
-				figureSelected = false;
-			}
+			this.repaint();
 		}
-		this.repaint();
 	}
 
 	private void closeWindow() {
@@ -210,5 +212,20 @@ public class PlayerGUI extends JFrame {
 			g.drawRect(LEFT_OFFSET + selectedCol * CELLSIZE, TOP_OFFSET + (7 - selectedRow) * CELLSIZE, CELLSIZE, CELLSIZE);
 			g2.setStroke(oldStroke);
 		}
+	}
+
+	public void allowMove(int color) {
+		myColor = color;
+		allowSelect = true;
+	}
+
+	public Move getMoveAndReset() {
+		Move playerMove = move;
+		if (move != null) {
+			move = null;
+			figureSelected = false;
+			allowSelect = false;
+		}
+		return playerMove;
 	}
 }

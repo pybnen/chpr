@@ -3,11 +3,14 @@ package org.chpr.chess;
 import org.chpr.chess.objects.Figure;
 import org.chpr.chess.objects.Move;
 import org.chpr.chess.utils.BoardUtils;
+import org.chpr.gui.PlayerGUI;
 import org.chpr.players.Player;
 import org.chpr.players.artificial.MyPlayer;
+import org.chpr.players.artificial.UberPlayer;
 import org.chpr.players.human.HumanPlayer;
 import org.chpr.players.human.HumanPlayerGUI;
 
+import javax.swing.*;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -19,8 +22,13 @@ public class Game {
 
 		Board board = new Board();
 
-		Player whitePlayer = new HumanPlayerGUI();
-		Player blackPlayer = new MyPlayer();
+		PlayerGUI gui = new PlayerGUI(board);
+		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		gui.setVisible(true);
+		gui.setSize(420, 180);
+
+		Player whitePlayer = new HumanPlayerGUI(gui);
+		Player blackPlayer = new UberPlayer();
 
 		boolean whiteMat = false;
 		boolean blackMat = false;
@@ -47,6 +55,7 @@ public class Game {
 			System.out.println(BoardUtils.ColorToString(currentColor) + " move: " + move.toString());
 			System.out.println();
 			board.executeMove(move);
+			gui.repaint();
 
 			currentColor = BoardUtils.FlipColor(currentColor);
 			if (board.isMat(currentColor)) {
