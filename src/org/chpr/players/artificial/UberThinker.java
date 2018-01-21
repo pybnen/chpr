@@ -4,13 +4,14 @@ import org.chpr.chess.IBoard;
 import org.chpr.chess.objects.Move;
 import org.chpr.chess.utils.BoardUtils;
 import org.chpr.players.Player;
+import org.chpr.players.Thinker;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 
-public class UberThinker implements Runnable {
+public class UberThinker implements Thinker {
 
 	private Player player;
 	private IBoard board;
@@ -21,7 +22,7 @@ public class UberThinker implements Runnable {
 
 	private static final double REAL_LOW_VALUE = Double.NEGATIVE_INFINITY;
 
-	public UberThinker(Player player, IBoard board, int color, Random random) {
+	public UberThinker(Player player, IBoard board, Integer color, Random random) {
 		this.player = player;
 		this.board = board;
 		this.color = color;

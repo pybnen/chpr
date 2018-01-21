@@ -5,6 +5,9 @@ import org.chpr.chess.objects.Move;
 import org.chpr.chess.utils.BoardUtils;
 import org.chpr.gui.PlayerGUI;
 import org.chpr.players.Player;
+import org.chpr.players.artificial.AlphaBetaPlayer;
+import org.chpr.players.artificial.EvalMovementPlayer;
+import org.chpr.players.artificial.MyPlayer;
 import org.chpr.players.artificial.UberPlayer;
 import org.chpr.players.human.HumanPlayerGUI;
 
