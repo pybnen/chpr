@@ -70,11 +70,12 @@ public class MyThinker implements Runnable {
 				tmp.executeMove(m);
 				double d = evaluate(tmp, BoardUtils.FlipColor(color), level - 1);
 
-			if (d > max) {
-				max = d;
+				if (d > max) {
+					max = d;
+				}
 			}
+			return max * -1;
 		}
-		return max * -1;
 	}
 
 	public Move getBestMove() {
