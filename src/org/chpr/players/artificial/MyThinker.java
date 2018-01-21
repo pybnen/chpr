@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Random;
 
 
-public class Thinker implements Runnable {
+public class MyThinker implements Runnable {
 
 	private Player player;
 	private IBoard board;
@@ -21,7 +21,7 @@ public class Thinker implements Runnable {
 
 	private static final double REAL_LOW_VALUE = -10000.0;
 
-	public Thinker(Player player, IBoard board, int color, Random random) {
+	public MyThinker(Player player, IBoard board, int color, Random random) {
 		this.player = player;
 		this.board = board;
 		this.color = color;
@@ -70,12 +70,11 @@ public class Thinker implements Runnable {
 				tmp.executeMove(m);
 				double d = evaluate(tmp, BoardUtils.FlipColor(color), level - 1);
 
-				if (d > max) {
-					max = d;
-				}
+			if (d > max) {
+				max = d;
 			}
-			return max * -1;
 		}
+		return max * -1;
 	}
 
 	public Move getBestMove() {

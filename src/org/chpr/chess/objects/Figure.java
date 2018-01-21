@@ -201,7 +201,7 @@ public class Figure {
 			if (!tmp.isCheck(color))
 				movesWithoutLosingKing.add(move);
 		}
-		
+
 		return movesWithoutLosingKing;
 	}
 

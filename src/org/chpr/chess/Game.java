@@ -5,9 +5,7 @@ import org.chpr.chess.objects.Move;
 import org.chpr.chess.utils.BoardUtils;
 import org.chpr.gui.PlayerGUI;
 import org.chpr.players.Player;
-import org.chpr.players.artificial.MyPlayer;
 import org.chpr.players.artificial.UberPlayer;
-import org.chpr.players.human.HumanPlayer;
 import org.chpr.players.human.HumanPlayerGUI;
 
 import javax.swing.*;
@@ -17,8 +15,9 @@ import java.util.Random;
 
 public class Game {
 	public static void main(String[] args) {
-		long seed = (new Date()).getTime();
-		Random random = new Random(seed);
+		//long seed = (new Date()).getTime();
+		// fix seed for testing
+		Random random = new Random(123456);
 
 		Board board = new Board();
 
@@ -36,7 +35,7 @@ public class Game {
 
 		int round = 1;
 		int MAX_ROUNDS = 200;
-		int MAX_TIME = 500;
+		int MAX_TIME = 1500;
 
 
 		int currentColor = Figure.WHITE;
@@ -66,7 +65,7 @@ public class Game {
 				}
 			} else {
 				List<Move> validMoves = board.getValidMoves(currentColor);
-				if (Figure.getSafeMoves(board, validMoves).size() == 0) {
+				if (validMoves.isEmpty()) {
 					remis = true;
 				}
 			}
@@ -77,7 +76,9 @@ public class Game {
 			System.out.println("Result: BLACK wins");
 		if (blackMat)
 			System.out.println("Result: WHITE wins");
-		if (remis || round == MAX_ROUNDS)
+		if (remis)
 			System.out.println("Result: REMIS");
+		if (round == MAX_ROUNDS)
+			System.out.println("Result: max. rounds reached");
 	}
 }

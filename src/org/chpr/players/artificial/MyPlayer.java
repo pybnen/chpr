@@ -50,7 +50,7 @@ public class MyPlayer implements Player {
 
 	@Override
 	public Move chooseMove(IBoard board, int color, int milliSeconds, Random random) {
-		Thinker thinker = new Thinker(this, board, color, random);
+		MyThinker thinker = new MyThinker(this, board, color, random);
 		Thread t = new Thread(thinker);
 		t.start();
 		try {
