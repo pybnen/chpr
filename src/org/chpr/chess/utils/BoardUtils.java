@@ -61,7 +61,8 @@ public class BoardUtils {
 			b2.executeMove(o2);
 			double eval1 = eval0(b1, o1.getColor());
 			double eval2 = eval0(b2, o2.getColor());
-			return Double.compare(eval1, eval2);
+			// compare eval2 with eval1 to order in descending order
+			return Double.compare(eval2, eval1);
 			
 		}
 		
