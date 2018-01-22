@@ -1,25 +1,27 @@
-package org.chpr.chess;
+package org.chpr.tests;
 
+import org.chpr.chess.Board;
 import org.chpr.chess.objects.Figure;
 import org.chpr.chess.objects.Move;
 import org.chpr.chess.utils.BoardUtils;
 import org.chpr.gui.PlayerGUI;
 import org.chpr.players.Player;
 import org.chpr.players.artificial.AlphaBetaPlayer;
-import org.chpr.players.artificial.EvalMovementPlayer;
 import org.chpr.players.artificial.MyPlayer;
-import org.chpr.players.artificial.UberPlayer;
+import org.chpr.players.human.HumanPlayer;
 import org.chpr.players.human.HumanPlayerGUI;
+import org.chpr.players.smart.HAlphaBetaPlayer;
+import org.chpr.players.smart.HPlayer;
 
 import javax.swing.*;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-public class Game {
+
+public class AITest {
 	public static void main(String[] args) {
-		long seed = (new Date()).getTime();
-		Random random = new Random(seed);
+		Random random = new Random(123123);
 
 		Board board = new Board();
 
@@ -29,7 +31,7 @@ public class Game {
 		gui.setSize(420, 180);
 
 		Player whitePlayer = new HumanPlayerGUI(gui);
-		Player blackPlayer = new MyPlayer();
+		Player blackPlayer = new AlphaBetaPlayer();
 
 		boolean whiteMat = false;
 		boolean blackMat = false;
@@ -37,10 +39,28 @@ public class Game {
 
 		int round = 1;
 		int MAX_ROUNDS = 200;
-		int MAX_TIME = 500;
+		int MAX_TIME = 5000;
 
+		short[][] figures = new short[8][8];
+//		figures[0][0] = Figure.KING + Figure.WHITE_OFFSET;
+//		figures[3][3] = Figure.PAWN + Figure.WHITE_OFFSET;
+//		figures[6][1] = Figure.PAWN + Figure.WHITE_OFFSET;
+//
+//		figures[7][3] = Figure.KING + Figure.BLACK_OFFSET;
+//		figures[2][1] = Figure.PAWN + Figure.BLACK_OFFSET;
+//		figures[2][5] = Figure.PAWN + Figure.BLACK_OFFSET;
+
+		figures[3][1] = Figure.KING + Figure.WHITE_OFFSET;
+		figures[3][3] = Figure.PAWN + Figure.WHITE_OFFSET;
+		figures[6][1] = Figure.PAWN + Figure.WHITE_OFFSET;
+
+		figures[5][3] = Figure.KING + Figure.BLACK_OFFSET;
+		figures[2][5] = Figure.PAWN + Figure.BLACK_OFFSET;
+
+		board.setFigures(figures);
 
 		int currentColor = Figure.WHITE;
+
 
 		while (!whiteMat && !blackMat && !remis && round < MAX_ROUNDS) {
 			System.out.println(BoardUtils.ColorToString(currentColor) + " to move");
@@ -57,30 +77,8 @@ public class Game {
 			System.out.println();
 			board.executeMove(move);
 			gui.repaint();
-
 			currentColor = BoardUtils.FlipColor(currentColor);
-			if (board.isMat(currentColor)) {
-				if (currentColor == Figure.WHITE) {
-					whiteMat = true;
-				} else {
-					blackMat = true;
-				}
-			} else {
-				List<Move> validMoves = board.getValidMoves(currentColor);
-				if (validMoves.isEmpty()) {
-					remis = true;
-				}
-			}
 			round++;
 		}
-
-		if (whiteMat)
-			System.out.println("Result: BLACK wins");
-		if (blackMat)
-			System.out.println("Result: WHITE wins");
-		if (remis)
-			System.out.println("Result: REMIS");
-		if (round == MAX_ROUNDS)
-			System.out.println("Result: max. rounds reached");
 	}
 }

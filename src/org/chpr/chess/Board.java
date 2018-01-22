@@ -476,17 +476,16 @@ public class Board implements IBoard {
 
 	@Override
 	public boolean isMat(int color) {
-		return getValidMoves(color).isEmpty() && isCheck(color);
-//		// return true if no king of given color is on the board
-//		for (int row = 0; row < ROWS; row++) {
-//			for (int col = 0; col < COLS; col++) {
-//				short figure = figures[col][row];
-//				if (Figure.getColor(figure) == color && Figure.getType(figure) == Figure.KING) {
-//					return false;
-//				}
-//			}
-//		}
-//		return true;
+		// return true if no king of given color is on the board
+		for (int row = 0; row < ROWS; row++) {
+			for (int col = 0; col < COLS; col++) {
+				short figure = figures[col][row];
+				if (Figure.getColor(figure) == color && Figure.getType(figure) == Figure.KING) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	@Override

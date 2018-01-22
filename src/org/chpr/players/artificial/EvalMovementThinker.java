@@ -20,7 +20,7 @@ public class EvalMovementThinker implements Thinker {
 	private List<Move> bestMoves;
 	private double bestFitness;
 
-	private static final double REAL_LOW_VALUE = -10000.0;
+	private static final double REAL_LOW_VALUE = -5000.0;
 
 	public EvalMovementThinker(Player player, IBoard board, Integer color, Random random) {
 		this.player = player;
@@ -64,8 +64,12 @@ public class EvalMovementThinker implements Thinker {
 		if (level == 0) {
 			return player.getFitness(b, color) * -1;
 		} else {
-			double max = REAL_LOW_VALUE;
 			List<Move> moves = b.getValidMoves(color);
+			if (moves.isEmpty() || b.isMat(color)) {
+				return player.getFitness(b, color) * -1;
+			}
+
+			double max = REAL_LOW_VALUE;
 			for (Move m : moves) {
 				IBoard tmp = b.cloneIncompletely();
 				tmp.executeMove(m);

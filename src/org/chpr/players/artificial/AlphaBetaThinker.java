@@ -20,7 +20,7 @@ public class AlphaBetaThinker implements Thinker {
 	private List<Move> bestMoves;
 	private double bestFitness;
 
-	private static final double REAL_LOW_VALUE = Double.NEGATIVE_INFINITY;
+	private static final double REAL_LOW_VALUE = -5000.0;
 
 	public AlphaBetaThinker(Player player, IBoard board, Integer color, Random random) {
 		this.player = player;
@@ -64,28 +64,29 @@ public class AlphaBetaThinker implements Thinker {
 		if (level == 0) {
 			return player.getFitness(b, color) * -1;
 		} else {
-			double max = REAL_LOW_VALUE;
 			List<Move> moves = b.getValidMoves(color);
-			moves.sort(BoardUtils.moveComp);
-			if (moves.size() == 0) {
-				// check for patt
-				if (!board.isCheck(color))
-					return 0;
-				else
-					return player.getFitness(b, color) * -1;	
+			if (moves.isEmpty() || board.isMat(color)) {
+				return player.getFitness(b, color) * -1;
 			}
+//			if (moves.size() == 0) {
+//				// check for patt
+//				if (!board.isCheck(color))
+//					return 0;
+//				else
+//					return player.getFitness(b, color) * -1;
+//			}
+			moves.sort(BoardUtils.moveComp);
+			double max = REAL_LOW_VALUE;
 			for (Move m : moves) {
 				IBoard tmp = b.cloneIncompletely();
 				tmp.executeMove(m);
 				double d = evaluate(tmp, BoardUtils.FlipColor(color), level - 1, -beta, -alpha);
 				if (d > max)
 					max = d;
-				if (d > alpha) {
+				if (d > alpha)
 					alpha = d;
 				if (alpha >= beta)
 					break;
-				
-				}
 			}
 			return max * -1;
 		}

@@ -20,7 +20,7 @@ public class UberThinker implements Thinker {
 	private List<Move> bestMoves;
 	private double bestFitness;
 
-	private static final double REAL_LOW_VALUE = Double.NEGATIVE_INFINITY;
+	private static final double REAL_LOW_VALUE = -5000.0;
 
 	public UberThinker(Player player, IBoard board, Integer color, Random random) {
 		this.player = player;
@@ -64,11 +64,13 @@ public class UberThinker implements Thinker {
 		if (level == 0) {
 			return player.getFitness(b, color) * -1;
 		} else {
-			double max = REAL_LOW_VALUE;
 			List<Move> moves = b.getValidMoves(color);
-			if (moves.size() == 0)
+			if (moves.isEmpty() || board.isMat(color)) {
 				return player.getFitness(b, color) * -1;
+			}
 			moves.sort(BoardUtils.moveComp);
+
+			double max = REAL_LOW_VALUE;
 			for (Move m : moves) {
 				IBoard tmp = b.cloneIncompletely();
 				tmp.executeMove(m);
