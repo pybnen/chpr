@@ -65,17 +65,15 @@ public class AlphaBetaThinker implements Thinker {
 			return player.getFitness(b, color) * -1;
 		} else {
 			List<Move> moves = b.getValidMoves(color);
-			if (moves.isEmpty() || board.isMat(color)) {
-				return player.getFitness(b, color) * -1;
+			if (moves.size() == 0) {
+				// check for patt
+				if (!board.isCheck(color))
+					return 0;
+				else
+					return player.getFitness(b, color) * -1;
 			}
-//			if (moves.size() == 0) {
-//				// check for patt
-//				if (!board.isCheck(color))
-//					return 0;
-//				else
-//					return player.getFitness(b, color) * -1;
-//			}
 			moves.sort(BoardUtils.moveComp);
+			
 			double max = REAL_LOW_VALUE;
 			for (Move m : moves) {
 				IBoard tmp = b.cloneIncompletely();

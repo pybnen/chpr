@@ -193,17 +193,15 @@ public class Figure {
 				}
 			}
 		}
-		return  moves;
-//		// remove moves that leave the color in check
-//		List<Move> movesWithoutLosingKing = new ArrayList<Move>();
-//		for (Move move : moves) {
-//			IBoard tmp = board.cloneIncompletely();
-//			tmp.executeMove(move);
-//			if (!tmp.isCheck(color))
-//				movesWithoutLosingKing.add(move);
-//		}
-//
-//		return movesWithoutLosingKing;
+		// remove moves that leave the color in check
+		List<Move> movesWithoutLosingKing = new ArrayList<Move>();
+		for (Move move : moves) {
+			IBoard tmp = board.cloneIncompletely();
+			tmp.executeMove(move);
+			if (!tmp.isCheck(color))
+				movesWithoutLosingKing.add(move);
+		}
+		return movesWithoutLosingKing;
 	}
 
 	private static List<Move> searchValidMoves(IBoard board, int col, int row, int figureType, int figureColor, int[][] directions) {

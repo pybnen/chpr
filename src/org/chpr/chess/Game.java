@@ -29,7 +29,7 @@ public class Game {
 		gui.setSize(420, 180);
 
 		Player whitePlayer = new HumanPlayerGUI(gui);
-		Player blackPlayer = new MyPlayer();
+		Player blackPlayer = new UberPlayer();
 
 		boolean whiteMat = false;
 		boolean blackMat = false;
@@ -67,7 +67,8 @@ public class Game {
 				}
 			} else {
 				List<Move> validMoves = board.getValidMoves(currentColor);
-				if (validMoves.isEmpty()) {
+				List<Move> saveMoves = Figure.getSafeMoves(board, validMoves);
+				if (saveMoves.isEmpty()) {
 					remis = true;
 				}
 			}

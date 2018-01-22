@@ -65,8 +65,12 @@ public class MyThinker implements Thinker {
 			return player.getFitness(b, color) * -1;
 		} else {
 			List<Move> moves = b.getValidMoves(color);
-			if (moves.isEmpty() || b.isMat(color)) {
-				return player.getFitness(b, color) * -1;
+			if (moves.size() == 0) {
+				// check for patt
+				if (!board.isCheck(color))
+					return 0;
+				else
+					return player.getFitness(b, color) * -1;
 			}
 
 			double max = REAL_LOW_VALUE;
